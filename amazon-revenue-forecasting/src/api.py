@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-def get_sales_history(asin_id, data_dir=r"C:\Users\PC\OneDrive\Dokumen\Amazon_sales_forecasting\data\sales_history"):
+def get_sales_history(asin_id, data_dir=r"/workspaces/ducnandbdt/amazon-revenue-forecasting/data/sales_history"):
     file_path = os.path.join(data_dir, f"{asin_id}_sales_history.csv")
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Sales history for ASIN {asin_id} not found")

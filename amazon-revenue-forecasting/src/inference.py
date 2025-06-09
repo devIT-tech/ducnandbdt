@@ -3,7 +3,7 @@ import numpy as np
 from model import SalesLSTM
 import os
 
-MODEL_DIR = r"C:\Users\PC\OneDrive\Dokumen\Amazon_sales_forecasting\best_models"  # Thư mục chứa mô hình đã lưu
+MODEL_DIR = r"/workspaces/ducnandbdt/amazon-revenue-forecasting/best_models"  # Thư mục chứa mô hình đã lưu
 
 # Hàm load mô hình
 def load_model(asin_id):

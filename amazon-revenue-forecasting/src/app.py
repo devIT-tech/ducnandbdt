@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from model import SalesLSTM
 
 # Cấu hình thư mục
-DATA_DIR = r"C:\Users\PC\OneDrive\Dokumen\Amazon_sales_forecasting\data\sales_history"
-MODEL_DIR = r"C:\Users\PC\OneDrive\Dokumen\Amazon_sales_forecasting\best_models"
+DATA_DIR = r"/workspaces/ducnandbdt/amazon-revenue-forecasting/data/sales_history"
+MODEL_DIR = r"/workspaces/ducnandbdt/amazon-revenue-forecasting/best_models"
 
 # Load mô hình từ file
 @st.cache_resource
