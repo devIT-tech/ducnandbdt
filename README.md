@@ -1,9 +1,6 @@
 # AgriDetectVL: A Vision-Language Model for Advanced Agricultural Counterfeit Detection
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.3.0%2B-orange)
-
-**A cutting-edge, resource-efficient vision-language model tailored for detecting counterfeit agricultural products**
+![Python](https://img.shields.i
 
 This repository provides the official implementation of the research paper: "AgriDetectVL: Emphasizing Agriculture-Focused Applications through Visual-Language Integration" by Dat Tran, Anh Duc Nguyen, and Hoai Nam Vu, published in *IEEE Access* (Volume 11, 2023).
 
@@ -133,13 +130,11 @@ These datasets focus on challenging agricultural tasks with noisy, in-the-wild d
 ## Citation
 If you find this work useful, please cite:
 ```
-@article{Tran2023AgriDetectVL,
+@article{AgriDetectVL,
   author = {Tran, Dat and Nguyen, Anh Duc and Vu, Hoai Nam},
   journal = {IEEE Access},
   title = {AgriDetectVL: Emphasizes the agriculture-focused application combined with Visual-Language integration},
-  volume = {11},
-  year = {2023},
-  doi = {10.1109/ACCESS.2024.0429000}
+  year = {2025},
 }
 ```
 
