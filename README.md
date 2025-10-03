@@ -1,132 +1,195 @@
-# AgriDetectVL: Interactive and Resource-Efficient Vision–Language Model for Counterfeit Agricultural Detection
+# AgriDetectVL
 
-This repository contains the official implementation of our IEEE Access paper:
-"AgriDetectVL: Emphasizes the Agriculture-Focused Application Combined with Visual-Language Integration"
-by Dat Tran, Anh Duc Nguyen (Thuyloi University), and Hoai Nam Vu (PTIT).
+An open-source implementation and research companion for the AgriDetectVL project (see the attached IEEE Access manuscript). This README provides a clean GitHub landing page with sections you can adapt as the code and assets are finalized.
+
+> Note: This repository currently contains other experiments (e.g., CLIP LDC). To avoid disrupting that work, this file is created as `README_AgriDetectVL.md`. When you're ready, you can replace `readme.md` with this content.
+
 
 ## Overview
 
-AgriDetectVL is an interactive and resource-efficient Vision–Language Model (VLM) designed for counterfeit-product detection in agriculture.
-It combines visual features, textual prototypes, temporal context, and human feedback to achieve accurate and efficient detection under real-world constraints (drones, edge devices, field robots).
+AgriDetectVL explores vision–language techniques for agricultural visual understanding and detection/recognition tasks. The approach leverages language-aligned representations to enhance robustness under limited labels and domain variations common in agriculture settings. The paper details the method, experiments, and ablations.
 
-Key challenges addressed:
+Key goals:
+- Improve recognition/detection performance in agricultural imagery using vision–language modeling.
+- Reduce annotation requirements through transfer, prompting, or weak supervision.
+- Provide a practical pipeline for dataset preparation, training, and evaluation.
 
-* Temporal context: tracking agricultural products over time.
-* User feedback: integrating operator corrections into predictions.
-* Resource efficiency: enabling real-time deployment on edge devices.
-
-## Key Contributions
-
-* Sequence Prompt Transformer (SPT): aggregates temporal visual context and user prompts.
-* Text Prototypes: class names and domain phrases encoded as anchors in embedding space.
-* Low-latency inference: single-pass cosine scoring with temperature scaling.
-* Human-in-the-loop: integrates corrections to refine future predictions.
-
-## Architecture
-
-* Vision Encoder (ViT-B/16): efficient backbone for visual features.
-* Large Language Model (Qwen2): interprets textual inputs.
-* Top-K Prompt Selector (TPS): retrieves most relevant visual prompts.
-* Sequence Prompt Transformer (SPT): models temporal dependencies.
-* Fusion Head: integrates refined visual and semantic vectors.
-
-## Results
-
-Datasets: Food-101, TLU-Fruit, and TLU-States.
-
-| Model        | Food-101 F1 | TLU-Fruit F1 | TLU-States F1 |
-| ------------ | ----------- | ------------ | ------------- |
-| InternVL2    | 85.1        | 82.5         | 80.2          |
-| LLaVA-OV     | 86.3        | 84.1         | 81.9          |
-| AgriDetectVL | 88.2        | 86.5         | 84.3          |
-
-* Latency: 55 ms (FP16), 32 ms (INT8)
-* Model Size: 310 MB (FP16), 155 MB (INT8)
-* Power: 8.1 W (FP16), 6.5 W (INT8)
-
-## Installation
-
-Requirements:
-
-* Python 3.8+
-* PyTorch 2.3+
-* Hugging Face Transformers
-* CUDA-enabled GPU (e.g., NVIDIA 3090)
-
-```bash
-# Clone repo
-git clone https://github.com/your-repo/AgriDetectVL.git
-cd AgriDetectVL
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-## Quick Start
-
-1. Dataset Preparation
-
-* Food-101 (auto-download via torchvision)
-* TLU-Fruit, TLU-States: [link to dataset]
-
-2. Run Training
-
-```bash
-python main.py --config configs/tlu_fruit.yaml
-python main.py --config configs/tlu_states.yaml
-```
-
-3. Run Inference
-
-```bash
-python eval.py --checkpoint checkpoints/agri_fruit.pth --dataset TLU-Fruit
-```
-
-## Evaluation
-
-Metrics supported:
-
-* F1-Score
-* Accuracy
-* AUC
-* MCC
-* Latency / Power (edge deployment profiling)
-
-## Datasets
-
-* TLU-Fruit: fine-grained fruit varieties (genuine vs counterfeit).
-* TLU-States: ripeness and state classification.
-* Food-101: standard benchmark for food recognition.
 
 ## Features
 
-* Training and evaluation pipelines with configs.
-* Edge-device ready (FP16 and INT8 quantization).
-* Human-in-the-loop feedback integration.
-* Supports zero-shot and few-shot extension.
+- Vision–language backbone with promptable text/image encoders.
+- Configurable training (zero-shot, few-shot, or full-data as available).
+- Evaluation scripts for standard agricultural datasets (customizable to your data).
+- Windows-friendly commands and paths.
+
+
+## Getting Started
+
+### Prerequisites
+
+- OS: Windows 10/11 (PowerShell)
+- Python: 3.9–3.11 recommended
+- PyTorch with CUDA (optional but recommended for GPU training)
+- Git
+
+### Environment setup
+
+You can use either Conda or venv. Example with Conda:
+
+```powershell
+# (optional) create and activate a new environment
+conda create -n agridetectvl python=3.10 -y; conda activate agridetectvl
+
+# install pytorch (adjust cuda version as needed)
+# See https://pytorch.org/get-started/locally/ for the right command.
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# core Python deps (add/remove as your implementation requires)
+pip install numpy pandas tqdm scikit-learn pillow matplotlib opencv-python
+
+# vision-language / transformers stack (if used)
+pip install transformers accelerate sentencepiece
+```
+
+If you maintain a `requirements.txt`, you can replace the pip installs above with:
+
+```powershell
+pip install -r requirements.txt
+```
+
+
+## Datasets
+
+Prepare your agricultural datasets in a consistent folder structure. A common pattern:
+
+```
+data/
+  dataset_name/
+    train/
+      class_a/ image_001.jpg
+               image_002.jpg
+      class_b/ ...
+    val/
+      class_a/ ...
+      class_b/ ...
+    test/      (optional)
+```
+
+Tips:
+- Keep class names human-readable if you plan to leverage text prompts.
+- If using CSV/JSON annotations, include a small loader script that maps to the expected format.
+- Document any preprocessing (resizing, normalization, augmentations).
+
+
+## Project Structure (suggested)
+
+```
+AgriDetectVL/
+  README.md                 # this file (rename when final)
+  src/
+    datasets/               # dataset loaders and transforms
+    models/                 # vision–language backbones, heads, adapters
+    training/               # train/val loops, losses, schedulers
+    inference/              # demo/inference utilities
+    utils/                  # misc helpers (metrics, logging)
+  scripts/
+    train.ps1               # Windows entrypoints (optional)
+    evaluate.ps1
+  requirements.txt          # pin your deps (optional)
+```
+
+
+## Quickstart
+
+Below are example commands you can adapt once scripts are in place.
+
+### Zero-shot evaluation (example)
+
+```powershell
+python -m src.inference.zero_shot `
+  --data-root d:\\data\\agri `
+  --dataset dataset_name `
+  --model vit_b16 `
+  --batch-size 64
+```
+
+### Few-shot training (example)
+
+```powershell
+python -m src.training.train `
+  --data-root d:\\data\\agri `
+  --dataset dataset_name `
+  --shots 16 `
+  --epochs 20 `
+  --lr 5e-4 `
+  --model vit_b16 `
+  --output .\\runs\\dataset_name_vit_b16_16shot
+```
+
+### Evaluation (example)
+
+```powershell
+python -m src.training.evaluate `
+  --data-root d:\\data\\agri `
+  --dataset dataset_name `
+  --checkpoint .\\runs\\dataset_name_vit_b16_16shot\\best.ckpt `
+  --batch-size 128
+```
+
+Adapt the flags to match your actual module and argument names.
+
+
+## Results
+
+Add your main tables/figures once available. If you export plots, keep them in a `results/` or `assets/` folder and reference them here, for example:
+
+![Overall architecture](./result/vis/arch.png)
+
+You can also include a short discussion of metrics and ablations.
+
+
+## Reproducing the Paper
+
+If your paper reports specific datasets, backbones, and hyperparameters, provide ready-to-run presets, e.g.:
+
+```powershell
+# Example: ViT-B/16, 16-shot, dataset_name
+python -m src.training.train `
+  --cfg configs\\dataset_name_vitb16_16shot.yaml
+```
+
+List all configs used for tables, and link them in a small index for convenience.
+
 
 ## Citation
 
-If you use this work, please cite:
+If you use this repository or the AgriDetectVL paper in your work, please cite:
 
-```
-@ARTICLE{AgriDetectVL2024,
-  author={Dat Tran and Anh Duc Nguyen and Hoai Nam Vu},
-  journal={IEEE Access},
-  title={AgriDetectVL: Emphasizes the Agriculture-Focused Application Combined with Visual-Language Integration},
-  year={2024},
-  doi={10.1109/ACCESS.2024.0429000}
+```bibtex
+@article{AgriDetectVL2025,
+  title   = {AgriDetectVL: Vision–Language Methods for Agricultural Visual Understanding},
+  author  = {First Author and Second Author and Others},
+  journal = {IEEE Access},
+  year    = {2025},
+  note    = {Under review / Accepted},
 }
 ```
 
-## Authors
+Replace with the final BibTeX entry from the paper once available.
 
-* Dat Tran – Thuyloi University – [dat.trananh@tlu.edu.vn](mailto:dat.trananh@tlu.edu.vn)
-* Anh Duc Nguyen – Thuyloi University
-* Hoai Nam Vu – PTIT – [namvh@ptit.edu.vn](mailto:namvh@ptit.edu.vn)
+
+## License
+
+Specify your license. For example:
+
+This work is licensed under the MIT License. See `LICENSE` for details.
+
 
 ## Acknowledgments
 
-We thank the Faculty of Information Technology at Thuyloi University and YIRLoDT Lab (PTIT) for supporting this research.
+This project builds on the broader vision–language ecosystem and toolchains. If you leverage external repositories, please acknowledge them here (e.g., CLIP, Transformers, dataset providers).
 
-Keywords: Vision–Language Models, Agriculture, Counterfeit Detection, Deep Learning, Computer Vision, Multimodal Learning
+
+## Contact
+
+For questions, issues, or contributions, please open a GitHub issue or contact the authors listed in the paper.
