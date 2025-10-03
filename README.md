@@ -1,39 +1,40 @@
-# AgriDetectVL: Agriculture-Focused Vision-Language Model with Interactive Capabilities
+# AgriDetectVL: A Vision-Language Model for Advanced Agricultural Counterfeit Detection
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.3.0%2B-orange)
 
-An efficient and interactive vision-language framework for monitoring counterfeit agricultural products
+**A cutting-edge, resource-efficient vision-language model tailored for detecting counterfeit agricultural products**
 
-This repository hosts the official code implementation for the research paper titled "AgriDetectVL: Emphasizes the agriculture-focused application combined with Visual-Language integration," authored by Dat Tran, Anh Duc Nguyen, and Hoai Nam Vu, and published in IEEE Access (Volume 11, 2023).
+This repository provides the official implementation of the research paper: "AgriDetectVL: Emphasizing Agriculture-Focused Applications through Visual-Language Integration" by Dat Tran, Anh Duc Nguyen, and Hoai Nam Vu, published in *IEEE Access* (Volume 11, 2023).
 
-## Project Summary
-AgriDetectVL is a specialized vision-language model (VLM) tailored for detecting and monitoring counterfeit agricultural items. It tackles essential issues in agricultural surveillance, such as:
+## Introduction
 
-- Incorporating Temporal Data: Processing sequences of time-series images alongside user-provided feedback.
-- Edge Device Compatibility: Operating within limited computational resources, suitable for devices like mobile units or drones.
-- User Interaction Support: Allowing real-time refinements via textual inputs to enhance accuracy progressively.
+AgriDetectVL is a pioneering vision-language model (VLM) designed to address the critical challenge of counterfeit product detection in agriculture. By integrating advanced visual processing with natural language understanding, the model offers a robust, interactive, and computationally efficient solution for agricultural monitoring. Key features include:
 
-The framework combines prototype-driven classification with linguistic cues, supporting fast inference and adaptable zero/few-shot learning.
+- **Temporal Context Awareness**: Seamlessly processes time-series imagery and incorporates operator feedback for enhanced decision-making.
+- **Resource Efficiency**: Optimized for low-compute environments, enabling deployment on edge devices such as drones and mobile phones.
+- **Human-in-the-Loop Interaction**: Leverages textual prompts to refine predictions dynamically, supporting real-time adaptability.
+- **Scalable and Versatile**: Supports zero/few-shot learning and fine-grained classification, making it adaptable to diverse agricultural scenarios.
 
-## System Design
-AgriDetectVL extends an optimized VLM foundation with key modules:
+The model combines prototype-based classification with language-guided reasoning, achieving low-latency inference and high accuracy in detecting counterfeit agricultural products. This implementation is optimized for practical deployment, balancing performance with computational constraints.
+## Architecture
+AgriDetectVL builds on an efficient VLM backbone with the following core components:
 
-- **Visual Processing Unit (VE)**: Utilizes Vision Transformer (ViT-B) to handle main images and reference prompts.
-- **Language Interpreter (LLM)**: Employs Qwen2 to process text-based instructions.
-- **Selective Prompt Mechanism (TPS)**: Identifies top-matching historical prompts from a stored Prompt Pool (PP) using similarity metrics.
-- **Temporal Prompt Processor (SPT)**: Combines chosen prompts into a cohesive vector, accounting for sequence relationships.
-- **Feature Fusion Layer (RVF)**: Merges SPT results with LLM outputs for task-specific applications.
-- **Prototype Classifier**: Employs text-derived prototypes for categories, using cosine-based scoring for outputs.
+- **Vision Encoder (VE)**: Based on Vision Transformer (ViT-B) for processing primary images and prompt images.
+- **Large Language Model (LLM)**: Qwen2 for interpreting textual prompts.
+- **Top-K Prompt Selector (TPS)**: Selects the most similar historical prompts from a Prompt Pool (PP) based on similarity.
+- **Sequence Prompt Transformer (SPT)**: Aggregates selected prompts into a refined vector, modeling sequential dependencies.
+- **Refined Vision Feature (RVF)**: Fuses SPT output with LLM semantic vectors for downstream tasks.
+- **Prototype-Based Classifier**: Uses text prototypes for class names, with cosine scoring for decisions.
 
-Optimized for performance with methods like FP8 mixed-precision and FlashAttention-2.
+The architecture supports multimodal fusion and is optimized for efficiency using techniques like mixed-precision training (FP8) and FlashAttention-2.
 
-![System Diagram](path/to/system-diagram.png)  <!-- Placeholder for Figure 1 or 2 from the paper -->
+![AgriDetectVL Architecture](path/to/architecture-diagram.png)  <!-- Replace with actual diagram if available, e.g., from Figure 1 or 2 in the paper -->
 
-## Performance Highlights
-Tested on key agricultural datasets: Food-101, TLU-Fruit (variety-specific), and TLU-States (ripeness/stage assessment).
+## Results
+Evaluated on agricultural benchmarks: Food-101, TLU-Fruit (fine-grained varieties), and TLU-States (state/ripeness).
 
-### Model Metrics Comparison (F1-Score, AUC, MCC)
+### Comparison Across Models (F1-Score, AUC, MCC)
 | Model                  | Dataset    | F1-Score      | AUC           | MCC           |
 |------------------------|------------|---------------|---------------|---------------|
 | 3*InternVL2 (Fine-tuned) | Food-101  | 85.1 ± 0.6   | 0.912 ± 0.05 | 0.795 ± 0.08 |
@@ -46,7 +47,7 @@ Tested on key agricultural datasets: Food-101, TLU-Fruit (variety-specific), and
 |                        | TLU-Fruit | 86.5 ± 0.4   | 0.922 ± 0.03 | 0.803 ± 0.05 |
 |                        | TLU-States| 84.3 ± 0.5   | 0.898 ± 0.04 | 0.781 ± 0.06 |
 
-### Resource Usage on Food-101
+### Efficiency on Food-101 Dataset
 | Model                  | F1-Score (%) | Latency (ms) | Power (W) | Size (MB) |
 |------------------------|--------------|--------------|-----------|-----------|
 | LLaVA-OV (FP16)       | 86.3        | 210         | 18.5     | 14500    |
@@ -54,83 +55,83 @@ Tested on key agricultural datasets: Food-101, TLU-Fruit (variety-specific), and
 | AgriDetectVL (FP16)    | 88.2        | 55          | 8.1      | 310      |
 | AgriDetectVL (INT8)    | 87.5        | 32          | 6.5      | 155      |
 
-AgriDetectVL excels over competitors while adhering to resource limits for field use.
+AgriDetectVL outperforms baselines while meeting edge-device constraints.
 
-## Setup Guide
-### Prerequisites
-- Python 3.8 or higher
-- PyTorch 2.3.0 or later
-- Transformers from Hugging Face
-- Supporting packages: NumPy, SciPy, Matplotlib (for analysis)
+## Installation
+### Requirements
+- Python 3.8+
+- PyTorch 2.3.0+
+- Hugging Face Transformers
+- Additional libraries: NumPy, SciPy, Matplotlib (for evaluation)
 
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/yourusername/AgriDetectVL.git
 cd AgriDetectVL
 
-# Install required packages
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## Getting Started
-### 1. Preparing Data
-- **Food-101**: Obtain from the standard source and place in `datasets/Food-101/`.
-- **TLU-Fruit and TLU-States**: Acquire from the paper's referenced links and organize in `datasets/TLU-Fruit/` and `datasets/TLU-States/`.
+## Quick Start
+### 1. Dataset Preparation
+- **Food-101**: Download from [official source] and extract to `datasets/Food-101/`.
+- **TLU-Fruit and TLU-States**: Download from [link provided in paper] and extract to `datasets/TLU-Fruit/` and `datasets/TLU-States/`.
 
-### 2. Running Examples
+### 2. Basic Usage
 ```bash
-# Execute on TLU-Fruit
+# Run AgriDetectVL on TLU-Fruit dataset
 python main.py --config configs/tlu_fruit.yaml
 
-# Execute on Food-101
+# Run on Food-101
 python main.py --config configs/food101.yaml
 
-# Execute on TLU-States
+# Run on TLU-States
 python main.py --config configs/tlu_states.yaml
 ```
 
-### 3. Configuration Adjustments
-Edit files in `configs/` for customizations:
-- Model backbone (e.g., ViT-B/16)
-- Class labels and prompt sets
-- Optimizer settings (learning rate: 5e-4, batch: 16)
-- Runtime mode (FP16/INT8)
-- Prompt count (Top-K value)
+### 3. Custom Configuration
+Modify configuration files in `configs/` to adjust:
+- Backbone (e.g., ViT-B/16)
+- Prompt templates and class names
+- Training hyperparameters (e.g., learning rate: 5e-4, batch size: 16)
+- Inference mode (FP16 or INT8 quantization)
+- Number of prompts (Top-K)
 
-## Performance Scaling
+## Scalability Analysis
 ```bash
-# Evaluate with alternate backbones
+# Test with different backbones
 python main.py --config configs/tlu_fruit.yaml --backbone ViT-B/16
 
-# Apply quantization
+# Test with quantization
 python main.py --config configs/tlu_fruit.yaml --quantization INT8
 ```
 
-## Assessment Metrics
-Supports key evaluations:
-- F1-Score: Precision-recall harmony
-- AUC: Separation quality
-- MCC: Imbalance handling
-- Accuracy: Total correctness
-- Efficiency: Time and energy metrics
+## Evaluation
+The framework supports evaluation metrics:
+- F1-Score: Balance between precision and recall
+- AUC: Class separability
+- MCC: Robustness to class imbalance
+- Accuracy: Overall performance
+- Latency and Power: For efficiency profiling
 
-## Data Resources
-- **TLU-Fruit**: Dataset for detailed fruit type identification in counterfeit scenarios, with professional labels.
-- **TLU-States**: Focuses on assessing fruit conditions, mimicking varied field environments.
-- **Food-101**: Benchmark for initial training and cross-comparisons.
+## Datasets
+- **TLU-Fruit**: Fine-grained fruit varieties dataset for counterfeit detection, with expert-verified annotations.
+- **TLU-States**: Fruit state/ripeness recognition, simulating real-world agricultural scenarios with varying lighting and backgrounds.
+- **Food-101**: General food recognition benchmark used for pretraining and comparison.
 
-Designed for tough, real-world agricultural data with environmental variations.
+These datasets focus on challenging agricultural tasks with noisy, in-the-wild data.
 
-## Core Advantages
-- Optimized for Resources: Achieves 32ms latency (INT8) and 155MB footprint for on-device operation.
-- Feedback-Enabled: Integrates user text for ongoing improvements.
-- Temporal Integration: Uses SPT for context over time.
-- Flexible Adaptation: Introduce categories via text without full retraining.
-- Reliable: Strong results in detailed tasks, minimizing similar-item errors.
-- Expandable: Compatible with standard GPUs (NVIDIA 3090) and portable hardware.
+## Key Features
+- Resource-Efficient: Low latency (32ms in INT8) and memory (155MB) for edge deployment.
+- Interactive: Supports human-in-the-loop with textual feedback.
+- Sequence-Aware: Integrates temporal context via SPT.
+- Zero/Few-Shot Capable: Add new categories via textual descriptions without retraining.
+- Robust: Consistent gains on fine-grained tasks, reducing look-alike confusions.
+- Scalable: Works on commodity GPUs (e.g., NVIDIA 3090) and embedded devices.
 
-## Reference Citation
-Please cite this work as:
+## Citation
+If you find this work useful, please cite:
 ```
 @article{Tran2023AgriDetectVL,
   author = {Tran, Dat and Nguyen, Anh Duc and Vu, Hoai Nam},
@@ -142,15 +143,16 @@ Please cite this work as:
 }
 ```
 
-## Research Team
+## Authors
 - Dat Tran - Thuyloi University, Hanoi, Vietnam  
   Email: dat.trananh@tlu.edu.vn
 - Anh Duc Nguyen - Thuyloi University, Hanoi, Vietnam  
+  Email: (not provided in paper)
 - Hoai Nam Vu - Young Innovation Research Laboratory (YIRLoDT), Posts and Telecommunications Institute of Technology, Hanoi, Vietnam  
   Email: namvh@ptit.edu.vn
 
-## Credits
-Supported by Thuyloi University and YIRLoDT. Testing performed on NVIDIA 3090 systems.
+## Acknowledgments
+We acknowledge the support from Thuyloi University and the Young Innovation Research Laboratory (YIRLoDT). Evaluations were conducted on NVIDIA 3090 GPUs.
 
-## Search Terms
-Agricultural counterfeit monitoring, Vision systems, Image analysis, VLM framework, Temporal prompt handling, Interactive feedback, Field-ready deployment, Detailed classification
+## Keywords
+Counterfeit agricultural detection, Computer vision, Image processing, Visual-Language model, Sequence Prompt Transformer, Human-in-the-loop, Edge deployment, Fine-grained recognition
