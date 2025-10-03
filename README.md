@@ -1,132 +1,146 @@
-# AgriDetectVL: Interactive and Resource-Efficient Vision–Language Model for Counterfeit Agricultural Detection
+AgriDetectVL: Agriculture-Focused Vision–Language Model
 
-This repository contains the official implementation of our IEEE Access paper:
-"AgriDetectVL: Emphasizes the Agriculture-Focused Application Combined with Visual-Language Integration"
-by Dat Tran, Anh Duc Nguyen (Thuyloi University), and Hoai Nam Vu (PTIT).
+Overview
 
-## Overview
+AgriDetectVL is an interactive and resource‑efficient vision–language model designed for counterfeit product detection and monitoring in agriculture. It integrates temporal visual context with human feedback and uses text prototypes for classification.
 
-AgriDetectVL is an interactive and resource-efficient Vision–Language Model (VLM) designed for counterfeit-product detection in agriculture.
-It combines visual features, textual prototypes, temporal context, and human feedback to achieve accurate and efficient detection under real-world constraints (drones, edge devices, field robots).
+Key Features
 
-Key challenges addressed:
+Sequence Prompt Transformer (SPT): Aggregates historical visual prompts for temporal awareness.
 
-* Temporal context: tracking agricultural products over time.
-* User feedback: integrating operator corrections into predictions.
-* Resource efficiency: enabling real-time deployment on edge devices.
+Top‑K Prompt Selector (TPS): Retrieves the most relevant visual prompts from a prompt pool.
 
-## Key Contributions
+Prototype‑Based Classification: Encodes class names and domain phrases as text prototypes.
 
-* Sequence Prompt Transformer (SPT): aggregates temporal visual context and user prompts.
-* Text Prototypes: class names and domain phrases encoded as anchors in embedding space.
-* Low-latency inference: single-pass cosine scoring with temperature scaling.
-* Human-in-the-loop: integrates corrections to refine future predictions.
+Human‑in‑the‑Loop: Allows operator feedback through textual prompts to refine decisions.
 
-## Architecture
+Resource Efficiency: Supports low‑latency, low‑memory inference for edge devices.
 
-* Vision Encoder (ViT-B/16): efficient backbone for visual features.
-* Large Language Model (Qwen2): interprets textual inputs.
-* Top-K Prompt Selector (TPS): retrieves most relevant visual prompts.
-* Sequence Prompt Transformer (SPT): models temporal dependencies.
-* Fusion Head: integrates refined visual and semantic vectors.
+Architecture
 
-## Results
+Efficient visual encoder (ViT‑B) with lightweight adapters.
 
-Datasets: Food-101, TLU-Fruit, and TLU-States.
+Frozen text encoder (e.g., Qwen2) to generate semantic vectors.
 
-| Model        | Food-101 F1 | TLU-Fruit F1 | TLU-States F1 |
-| ------------ | ----------- | ------------ | ------------- |
-| InternVL2    | 85.1        | 82.5         | 80.2          |
-| LLaVA-OV     | 86.3        | 84.1         | 81.9          |
-| AgriDetectVL | 88.2        | 86.5         | 84.3          |
+Shared L2‑normalized embedding space for images and text.
 
-* Latency: 55 ms (FP16), 32 ms (INT8)
-* Model Size: 310 MB (FP16), 155 MB (INT8)
-* Power: 8.1 W (FP16), 6.5 W (INT8)
+Fusion of SPT output and LLM semantic vectors through the RVF block.
 
-## Installation
+Training & Inference
 
-Requirements:
+Loss functions: prototype cross‑entropy, vision–language alignment (InfoNCE), and prototype regularization.
 
-* Python 3.8+
-* PyTorch 2.3+
-* Hugging Face Transformers
-* CUDA-enabled GPU (e.g., NVIDIA 3090)
+Single‑pass inference using temperature‑scaled cosine similarity.
 
-```bash
-# Clone repo
-git clone https://github.com/your-repo/AgriDetectVL.git
-cd AgriDetectVL
+Zero/few‑shot extension by adding textual labels without retraining.
 
-# Install dependencies
-pip install -r requirements.txt
-```
+Datasets
 
-## Quick Start
+Food‑101: General food classification.
 
-1. Dataset Preparation
+TLU‑Fruit: Fine‑grained agricultural varieties.
 
-* Food-101 (auto-download via torchvision)
-* TLU-Fruit, TLU-States: [link to dataset]
+TLU‑States: Ripeness and product state recognition.
 
-2. Run Training
+Experimental Results
 
-```bash
-python main.py --config configs/tlu_fruit.yaml
-python main.py --config configs/tlu_states.yaml
-```
+AgriDetectVL outperforms baseline models (LLaVA‑OV, InternVL2) across metrics:
 
-3. Run Inference
+Higher F1‑Score, AUC, and MCC.
 
-```bash
-python eval.py --checkpoint checkpoints/agri_fruit.pth --dataset TLU-Fruit
-```
+Lower variance and increased robustness.
 
-## Evaluation
+Superior latency, power consumption, and model size (especially in INT8 mode).
 
-Metrics supported:
+Efficiency (Example on Food‑101)
 
-* F1-Score
-* Accuracy
-* AUC
-* MCC
-* Latency / Power (edge deployment profiling)
+Model
 
-## Datasets
+F1‑Score
 
-* TLU-Fruit: fine-grained fruit varieties (genuine vs counterfeit).
-* TLU-States: ripeness and state classification.
-* Food-101: standard benchmark for food recognition.
+Latency
 
-## Features
+Power
 
-* Training and evaluation pipelines with configs.
-* Edge-device ready (FP16 and INT8 quantization).
-* Human-in-the-loop feedback integration.
-* Supports zero-shot and few-shot extension.
+Size
 
-## Citation
+LLaVA‑OV (FP16)
 
-If you use this work, please cite:
+86.3%
 
-```
-@ARTICLE{AgriDetectVL2024,
-  author={Dat Tran and Anh Duc Nguyen and Hoai Nam Vu},
-  journal={IEEE Access},
-  title={AgriDetectVL: Emphasizes the Agriculture-Focused Application Combined with Visual-Language Integration},
-  year={2024},
-  doi={10.1109/ACCESS.2024.0429000}
-}
-```
+210 ms
 
-## Authors
+18.5 W
 
-* Dat Tran – Thuyloi University – [dat.trananh@tlu.edu.vn](mailto:dat.trananh@tlu.edu.vn)
-* Anh Duc Nguyen – Thuyloi University
-* Hoai Nam Vu – PTIT – [namvh@ptit.edu.vn](mailto:namvh@ptit.edu.vn)
+14.5 GB
 
-## Acknowledgments
+InternVL2 (FP16)
 
-We thank the Faculty of Information Technology at Thuyloi University and YIRLoDT Lab (PTIT) for supporting this research.
+85.1%
 
-Keywords: Vision–Language Models, Agriculture, Counterfeit Detection, Deep Learning, Computer Vision, Multimodal Learning
+195 ms
+
+17.2 W
+
+12.8 GB
+
+AgriDetectVL FP16
+
+88.2%
+
+55 ms
+
+8.1 W
+
+310 MB
+
+AgriDetectVL INT8
+
+87.5%
+
+32 ms
+
+6.5 W
+
+155 MB
+
+Ablation Insights
+
+Vision encoder alone: baseline performance.
+
+
+
+Text prompts improves accuracy.
+
+
+
+TPS visual prompts yields significant gains.
+
+
+
+SPT provides the highest overall performance.
+
+Limitations
+
+Relies on historical visual data for best performance.
+
+Resource demands may still challenge ultra‑low‑power devices.
+
+Generalization outside agriculture requires further work.
+
+Future Directions
+
+Few‑shot learning for reduced annotation.
+
+Pruning and quantization for improved efficiency.
+
+Additional modalities (e.g., spectral data).
+
+Enhanced multimodal dialogue and explainability.
+
+Citation
+
+If using AgriDetectVL in academic work, please cite the corresponding IEEE Access article:
+
+Dat Tran, Anh Duc Nguyen, Hoai Nam Vu. "AgriDetectVL: Emphasizes the agriculture-focused application combined with Visual-Language integration," IEEE Access, 2024.
+
